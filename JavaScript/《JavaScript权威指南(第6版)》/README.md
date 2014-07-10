@@ -212,3 +212,86 @@
 7.静态分析可以有效的防止带有点(.)运算符的属性存取表达式去读写特殊属性。
 
 ## 第12章，服务器端JavaScript ##
+
+1.Rhino是基于Java的JavaScript解析器，实现了通过JavaScript程序访问整个Java API
+
+2.Node是Google的V8 JavaScript解析器的一个特别版本，他在底层绑定了POSIX  API，包括文件、进程、流和套接字等，并侧重于异步I/O、网络和HTTP
+
+3.Rhino程序能使用Java的Swing框架创建图形UI,而Node上运行的JavaScript程序可以像shell脚本那样去操作文件
+
+第二部分  客户端JavaScript
+------
+## 第13章，Web浏览器中的JavaScript ##
+
+1.Window对象是所有客户端JavaScript特性和API的主要接入点。他表示web浏览器的一个窗口或窗体，并且可以用标识符window来引用他。
+
+2.在客户端JavaScript中，window对象也是全局对象。这意味着window对象处于作用域链的顶部，他的属性和方法实际上是全局变量和全局函数。
+
+3.当脚本所在的HTML文件被载入浏览器时，这个脚本里的JavaScript代码只会执行一次
+
+4.在URL后面跟一个javascript：协议限定符，是另一种嵌入JavaScript代码到客户端的方式。
+
+5.脚本的执行在默认情况下都是同步和阻塞。<script/>标签可以有defer和saync属性，这可以改变脚本的执行方式。如果<script/>标签同事有两个属性，同时支持两者的浏览器会遵从async属性并忽略defer属性
+
+6.按照约定，事件处理程序的属性的名字是以“on”开始，后面跟着事件的名字。对于大部分浏览器中的大部分事件来说，会把一个对象传递给事件处理程序作为参数，那个对象的属性提供了事件的详细信息（在Ie里，这些事件信息被存储在全局event对象里，而不是传递给处理程序函数）
+
+7.HTML5定义类一种并发的控制方式，叫做“Web workers”。Web worker是一个用来执行计算密集任务而不冻结用户界面的后台线程。运行在Web worker线程里的代码不能访问文档内容，不能和主线程或其他worker共享状态，只可以和主线程和其他worker通过异步事件进行通信，所以主线程不能检测并发性，并且Web worker不能修改JavaScript程序的基础单线程执行模式
+
+8.客户端JavaScript兼容性和交互性的问题可以归纳为一下三类：演化，未实现，bug
+
+9.要进行渲染模式的特性检测，通常检查document.compatMode属性。如果其值为"CSS1Compat"，则说明浏览器工作在标准模式；如果值为"BackCompat"（或undefined，说明属性根本不存在），则说明浏览器工作在怪异模式
+
+10.<!--[if IE]<script type="text/javascript"></script><![endif]-->
+
+11.JavaScript可访问性的一条重要原则是，设计的代码即使在禁用JavaScript解析器的浏览器中也能正常使用
+
+12.同源策略是对JavaScript代码能够操作哪些web内容的一条完整的安全限制。脚本只能读取搜书文档来源相同的窗口和文档的属性
+
+13.跨文档消息，允许来自一个文档的脚本可以传递文本消息到另一个文档里的脚本，而不管脚本的来源是否不同。调用windows对象上的postMessage()方法，可以一步传递消息事件（可以用onmessage事件处理程序来处理他）到窗口的文档里
+
+14.跨站脚本（xss），是攻击者向目标web站点注入html标签或者脚本
+
+15.防止XSS攻击的方式是，在试用任何不可信的数据来动态的创建文档内容之前，从中移除HTML标签
+
+## 第14章，Window对象 ##
+
+1.setTimeout()和setInterval()可以用来注册在指定的事件之后单次或重复调用的函数
+
+2.window.location === document.location //总是返回true
+
+3.Document对象也有一个URL属性，是文档首次载入后保存该文档的URL的静态字符串
+
+4.Location对象的protocal，host，hostname，port，pathname和search，分别表示URL的各个部分,他们呗称为“RUL分解”属性，同时被Link对象支持
+
+5.Location对象的assign()方法可以使窗口载入并显示你指定的URL中的文档，replace()方法也类似，但他在载入新文档之前会从浏览历史中把当前文档删除。除此之外，Location对象还定义了reloat()方法，可以让浏览器重新载入当前文档
+
+6.History对象是用来把窗口的浏览历史用文档和文档状态列表的形式表示。History对象的back()和forward()方法与浏览器的“后退”和“前进”按钮一样，第三个方法--go()接受一个整数参数，可以在历史列表中先前（正参数）或向后（负参数）跳过任意多个页
+
+7.如果窗口包含多个子窗口（比如iframe元素）,子窗口的浏览历史会按时间顺序穿插在主窗口的历史中，这意味着在主窗口调用history.back()可能会导致其中一个子窗口往回跳转到前一个显示的文档，但主窗口保留当前状态不变
+
+8.Window对象的navigator属性引用的是包含浏览器厂商和版本信息的Navigator对象。它有四个很有用的属性：appName，Web浏览器的全称；appVersion，浏览器厂商和版本信息的详细字符串；userAgent，浏览器在它的USER-AGENT HTTP头部中发送的字符串；paltform，在起上运行浏览器的操作系统的字符串
+
+9.Window对象的screen属性提供了有关窗口显示的大小和可用的颜色数量的信息。属性width和height指定的是以像素为单位的窗口大小。属性availWith和availHeight指定的是实际可用的显示大小。属性colorDepth指定的是显示的BPP值
+
+10.Window对象提供了三个方法来向用户显示简单的对话框。alert()向用户显示一条消息并等待用户关闭对话框。confirm()也显示一条信息，要求用户单击“确定”或“取消”按钮，并返回一个布尔值。promptly()同样也显示一条信息，等待用户输入字符串，并返回那个字符串
+
+11.如果文档包含一个<button id="okay"/>元素，可以通过全局变量okay来引用此元素
+
+12。一个Web浏览器窗口可能在桌面上包含多个标签页，每个标签页都是独立的“浏览上下文”，每一个上下文都有独立的Window对象，而且互相之间互不干扰。
+
+13.Window.open()载入指定的URL到新的或已存在的窗口中，并返回那个窗口的Window对象
+
+## 第15章，脚本化文档 ##
+
+1.文档对象模型（DOM）是表示和操作HTML和XML文档内容的基础API。首先，应该理解HTML或XML文档的嵌套元素在DOM树对象中的表示。
+
+2.Node定义了一下重要属性：parentNode:该节点的父节点；childNodes:该节点的子节点的实时表示；firstChild、lastChild:该节点的子节点中的第一个和最后一个；nextSibling、previoursSibling:该节点的兄弟节点中的前一个和下一个；nodeType:该节点的类型；nodeValue:Text节点或Comment节点的文本内容；nodeName:元素的标签名，以大写形式表示
+
+3.HTML5还在Element对象上定义了dataset属性。该属性指代一个对象，他的各个属性对应于去掉前缀的data-属性。因此dataset.x应该保存data-x属性的值。带连字符的属性对应于驼峰命名属性名
+
+## 第16章，脚本化CSS ##
+
+1.层叠样式表（css）是一种指定HTML文档视觉表现的标准。它允许设计师准确的指定文档元素的字体、颜色、外边距、缩进、边框，甚至是定位
+
+2.利用css的@font-face规则可以下载并使用自定义字体
+
